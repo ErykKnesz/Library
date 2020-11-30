@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Books - library</title>
+    <style>
+        table, th, tr, td {border: 1px solid green;}
+    </style>
+</head>
+
+<h2>Books</h2>
+
+<table>
+    <thead>
+    <th>Book</th>
+    <th>Author</th>
+    <th>Available?</th>
+    </thead>
+{% for book in books %}
+    <tr>
+        <td><a href="/books/{{ loop.index }}">{{ book.date }}</a></td>
+        <td>{{ book.item }}</td>
+        <td>{{ book.quantity }}</td>
+        <td>{{ book.book }}</td>
+    </tr>
+{% endfor %}
+</table>
+<div>
+    <h2> Insert a new book: </h2>
+    <form method="POST" action="/books/">
+        {{ form.hidden_tag() }}
+        <table>
+            {% for field in form if field.widget.input_type != 'hidden' %}
+                <tr>
+                    <th>{{ field.label }} {% if field.flags.required %}*{% endif %}</th>
+                    <td>{{ field }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+        <input type="submit" value="Go">
+    </form>
+</div>
+</body>
+</html>

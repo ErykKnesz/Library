@@ -1,11 +1,8 @@
 from flask import (request, render_template, redirect,
                    url_for, jsonify, abort, make_response)
-from forms import BooksForm
-from models import Books
-
-
-app = Flask(__name__)
-app.config["SECRET_KEY"] = "nininini"
+from app import db, app
+#from forms import BooksForm
+#from models import Books
 
 
 @app.route("/books/", methods=["GET", "POST"])

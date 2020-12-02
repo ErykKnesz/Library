@@ -1,38 +1,30 @@
 from datetime import datetime
 from app import db, app
 
+
+association_table = db.Table('association',
+    db.Column('book_id', db.Integer, db.ForeignKey('book.id'), primary_key=True),
+    db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True)
+)
+
 class Book(db.Model):
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), index=True, unique=True)
-    author = db.relationship("Author", backref="book", lazy="dynamic")
-    borrowed = db.relationship(
-        "Borrowed",
-        uselist=False,
-        back_populates="book")
-    
+    authors = db.relationship("Author", lazy='subquery', secondary=association_table,
+                               backref=db.backref('books', lazy=True))
+    borrowed = db.Column(db.Boolean)
+
     def __str__(self):
-        return f"<User {self.username}>"
+        return f"<User {self.title}>"
 
 
 class Author(db.Model):
     __tablename__ = 'author'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), index=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
 
     def __str__(self):
-        return f"<Author {self.id} ...>"
+        return f"<Author {self.name} ...>"
 
-
-class Borrowed(db.Model):
-    __tablename__ = 'borrowed'
-    available = db.Column(db.Boolean, primary_key=True)
-    book_id = db.Column(db.Integer, db.ForeignKey('book.id'))
-    borrowed = db.relationship(
-        "Book",
-        back_populates="borrowed")
-    
-    def __str__(self):
-        return f"<Available {self.available} ...>"
     

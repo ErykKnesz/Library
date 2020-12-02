@@ -1,35 +1,36 @@
 from flask import (request, render_template, redirect,
                    url_for, jsonify, abort, make_response)
-from app import db, app
-#from forms import BooksForm
-#from models import Books
+from app import app, models, forms, functions
+
 
 
 @app.route("/books/", methods=["GET", "POST"])
 def books_list():
-    form = BooksForm()
+    form = forms.BooksForm()
     error = ""
     if request.method == "POST":
         if form.validate_on_submit():
-            Books.create(form.data)
+            print(form.data)
+            functions.books.add_book(form.data)
         return redirect(url_for("books_list"))
 
     return render_template(
         "form.html",
         form=form,
-        books=Books.all(),
+        books=[[1, 2]],
         error=error
     )
 
 
 @app.route("/books/<int:book_id>/", methods=["GET", "POST"])
 def book_details(book_id):
-    book = Books.get(book_id)
+    book = "Books.get(book_id)"
     form = BooksForm(data=book)
 
     if request.method == "POST":
         if form.validate_on_submit():
-            Books.update(book_id, form.data)
+            #Books.update(book_id, form.data)
+            pass
         return redirect(url_for("books_list"))
     return render_template(
         "books_details.html",
@@ -37,7 +38,7 @@ def book_details(book_id):
         book_id=book_id
     )
 
-
+'''
 @app.route("/api/v1/books/", methods=["POST"])
 def create_book():
     if not request.json:
@@ -112,3 +113,4 @@ def bad_request(error):
         jsonify({'error': 'Bad request', 'status_code': 400}), 400
     )
 
+'''

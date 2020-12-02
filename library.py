@@ -1,5 +1,5 @@
 from app import app, db
-from app.models import Book, Author, Borrowed
+from app.models import Book, Author
 
 
 @app.shell_context_processor
@@ -8,7 +8,7 @@ def make_shell_context():
        "db": db,
        "Book": Book,
        "Author": Author,
-       "Borrowed": Borrowed}
+       }
 
 
 if __name__ == "__main__":

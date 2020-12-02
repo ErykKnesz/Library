@@ -6,4 +6,4 @@ from wtforms.validators import DataRequired
 class BooksForm(FlaskForm):
     title = StringField('book', validators=[DataRequired()])
     author = StringField('author', validators=[DataRequired()])
-    available = BooleanField('available', validators=[DataRequired()])
+    available = BooleanField('available')

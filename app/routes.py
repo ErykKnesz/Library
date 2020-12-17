@@ -1,6 +1,7 @@
 from flask import (request, render_template, redirect,
                    url_for, jsonify, abort, make_response)
-from app import app, models, forms, functions
+from app import app, models, forms, db
+from app.Library import books
 
 
 
@@ -10,27 +11,33 @@ def books_list():
     error = ""
     if request.method == "POST":
         if form.validate_on_submit():
-            print(form.data)
-            functions.books.add_book(form.data)
+            books.add_book(form.data)
+        else:
+            print(form.errors)
         return redirect(url_for("books_list"))
 
     return render_template(
         "form.html",
         form=form,
-        books=[[1, 2]],
+        books=books.all(),
         error=error
     )
 
 
 @app.route("/books/<int:book_id>/", methods=["GET", "POST"])
 def book_details(book_id):
-    book = "Books.get(book_id)"
-    form = BooksForm(data=book)
-
+    book = books.get(book_id)
+    data = {
+        'title': book.title,
+        'author': ", ".join([author.name for author in book.authors]),
+        'available': book.borrowed
+    }
+    form = forms.BooksForm(data=data)
     if request.method == "POST":
         if form.validate_on_submit():
-            #Books.update(book_id, form.data)
-            pass
+            books.change(book_id, form.data)
+        else:
+            print(form.errors)
         return redirect(url_for("books_list"))
     return render_template(
         "books_details.html",
@@ -38,66 +45,11 @@ def book_details(book_id):
         book_id=book_id
     )
 
-'''
-@app.route("/api/v1/books/", methods=["POST"])
-def create_book():
-    if not request.json:
-        abort(400)
-    book = {
-            'date': request.json['date'],
-            'item': request.json['item'],
-            'quantity': request.json.get('quantity'),
-            'book': request.json.get('book')
-    }
-    Books.create(book)
-    return jsonify({'book': book}), 201
 
-
-@app.route("/api/v1/books/", methods=["GET"])
-def books_list_api_v1():
-    return jsonify(Books.all())
-
-
-@app.route("/api/v1/books/<int:book_id>", methods=["GET"])
-def get_book(book_id):
-    book = Books.get(book_id)
-    if not book:
-        abort(404)
-    return jsonify({"book": book})
-
-
-@app.route("/api/v1/books/<int:book_id>", methods=['DELETE'])
-def delete_books(book_id):
-    result = Books.delete(book_id)
-    if not result:
-        abort(404)
-    return jsonify({'result': result})
-
-
-@app.route("/api/v1/books/<int:book_id>", methods=["PUT"])
-def update_books(book_id):
-    book = Books.get(book_id)
-    if not book:
-        abort(404)
-    if not request.json:
-        abort(400)
-    data = request.json
-    if any([
-        'date' in data and not isinstance(data.get('date'), str),
-        'item' in data and not isinstance(data.get('item'), str),
-        'quantity' in data and not isinstance(data.get('quantity'), int),
-        'book' in data and not isinstance(data.get('book'), float)
-    ]):
-        abort(400)
-    book = {
-        'id': book_id,
-        'date': data.get('date', book['date']),
-        'item': data.get('item', book['item']),
-        'quantity': data.get('quantity', book['quantity']),
-        'book': data.get('book', book['book'])
-    }
-    Books.update(book_id, book)
-    return jsonify({'book': book})
+@app.route("/delete/<int:book_id>/", methods=["GET"])
+def delete_book(book_id):
+    book = books.delete(book_id)
+    return redirect(url_for("books_list"))
 
 
 @app.errorhandler(404)
@@ -112,5 +64,3 @@ def bad_request(error):
     return make_response(
         jsonify({'error': 'Bad request', 'status_code': 400}), 400
     )
-
-'''

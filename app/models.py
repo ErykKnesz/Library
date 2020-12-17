@@ -7,6 +7,7 @@ association_table = db.Table('association',
     db.Column('author_id', db.Integer, db.ForeignKey('author.id'), primary_key=True)
 )
 
+
 class Book(db.Model):
     __tablename__ = 'book'
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +17,7 @@ class Book(db.Model):
     borrowed = db.Column(db.Boolean)
 
     def __str__(self):
-        return f"<User {self.title}>"
+        return f"<Book {self.title},{self.authors},{self.borrowed}>"
 
 
 class Author(db.Model):
@@ -26,5 +27,3 @@ class Author(db.Model):
 
     def __str__(self):
         return f"<Author {self.name} ...>"
-
-    

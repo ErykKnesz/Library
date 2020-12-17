@@ -18,10 +18,16 @@
     </thead>
 {% for book in books %}
     <tr>
-        <td><a href="/books/{{ loop.index }}">{{ book.date }}</a></td>
-        <td>{{ book.item }}</td>
-        <td>{{ book.quantity }}</td>
-        <td>{{ book.book }}</td>
+        <td><a href="/books/{{ loop.index }}">{{ book.title }}</a></td>
+        
+        <td>{% for author in book.authors %}{{ author.name }}, {% endfor %}</td>
+
+        <td>{{ book.borrowed }}</td>
+        <td>
+            <form method="GET" action="/delete/{{ book.id }}">
+                <input type="submit" value="Delete">
+            </form>
+        </td>
     </tr>
 {% endfor %}
 </table>

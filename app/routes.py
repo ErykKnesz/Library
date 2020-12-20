@@ -8,6 +8,7 @@ from app.Library import books
 @app.route("/books/", methods=["GET", "POST"])
 def books_list():
     form = forms.BooksForm()
+    reads = models.Book.query.all()
     error = ""
     if request.method == "POST":
         if form.validate_on_submit():
@@ -19,7 +20,7 @@ def books_list():
     return render_template(
         "form.html",
         form=form,
-        books=books.all(),
+        books=reads,
         error=error
     )
 

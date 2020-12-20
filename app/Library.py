@@ -11,7 +11,7 @@ class Library:
     def __init__(self):
         books = models.Book.query.all()
         self.books = books
-    
+ 
     def add_book(self, data):
         if 'csrf_token' in data:
             data.pop('csrf_token')
@@ -20,9 +20,6 @@ class Library:
             new_book.authors.append(models.Author(name=author))
         db.session.add(new_book)
         db.session.commit()
-    
-    def all(self):
-        return self.books
 
     def get(self, id):
         book = models.Book.query.get(id)

@@ -10,6 +10,6 @@ Download as ZIP or by cloning the repository
 # What is it made of?
 
 >The app uses Flask SQAlchemy as an ORM tool for governing sqlite queries. Data is stored in library.db. The authors included are just examples. You can add more >authors to the form using your console:  
->FLASK_APP=app flask shell 
->will enable you to run commands in the terminal: 
+>FLASK_APP=app flask shell  
+>will enable you to run commands in the terminal:  
 >e.g. book = Book.query.first(), >book.authors.append(models.Author(name='name'))

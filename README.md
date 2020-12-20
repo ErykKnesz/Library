@@ -1,10 +1,10 @@
 # Library
-# Download as ZIP or by cloning the repository
-# HOW TO USE
+Download as ZIP or by cloning the repository
+# How to use
 
-pip install -r requirements.txt
-run library.py
-use forms to add new books, edit books, or delete a book by clicking on the "delete" button
+>pip install -r requirements.txt
+>run library.py
+>use forms to add new books, edit books, or delete a book by clicking on the "delete" button
 
 
 # What is it made of?
